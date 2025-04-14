@@ -1,6 +1,34 @@
+[workspace]
+members = [".", "lina-rs-macros"]
+
+[workspace.package]
+version = "0.1.0"
+license = "Unlicense"
+edition = "2024"
+repository = "https://github.com/Takasaki-Studio/lina-rs"
+authors = ["Yummiii <Leeo05050@protonmail.com>"]
+
 [package]
 name = "lina-rs"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[features]
+all = ["error", "sqlx"]
+error = []
+sqlx = ["dep:sqlx", "dep:lina-rs-macros", "dep:async-trait"]
+
+[workspace.dependencies]
+lina-rs-macros = { version = "0.1.0", path = "lina-rs-macros" }
 
 [dependencies]
+sqlx = { version = "0.8.3", optional = true, features = [
+    "runtime-tokio",
+    "tls-rustls",
+] }
+lina-rs-macros = { workspace = true, optional = true }
+async-trait = { version = "0.1.88", optional = true }
+serde = { version = "1.0.219", features = ["derive"] }

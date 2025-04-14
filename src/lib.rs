@@ -1,14 +1,13 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+#[cfg(feature = "error")]
+pub mod error;
+
+#[cfg(feature = "sqlx")]
+pub mod sqlx;
+
+pub mod macros {
+    pub use lina_rs_macros::repo;
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub mod prelude {
+    pub use async_trait::async_trait;
 }
