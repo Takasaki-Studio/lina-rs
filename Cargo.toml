@@ -20,6 +20,9 @@ repository.workspace = true
 all = ["error", "sqlx"]
 error = []
 sqlx = ["dep:sqlx", "dep:lina-rs-macros", "dep:async-trait"]
+postgres = ["sqlx/postgres"]
+mysql = ["sqlx/mysql"]
+sqlite = ["sqlx/sqlite"]
 
 [workspace.dependencies]
 lina-rs-macros = { version = "0.1.0", path = "lina-rs-macros" }

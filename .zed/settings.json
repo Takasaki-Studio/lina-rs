@@ -3,10 +3,10 @@
     "rust-analyzer": {
       "initialization_options": {
         "cargo": {
-          "features": "all"
+          "features": ["all", "postgres"]
         },
         "check": {
-          "features": "all"
+          "features": ["all", "postgres"]
         }
       }
     }

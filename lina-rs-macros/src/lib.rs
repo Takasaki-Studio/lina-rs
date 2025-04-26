@@ -31,12 +31,14 @@ pub fn repo(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let crud_impl = if let Some(model) = args.model {
         quote! {
+            use lina_rs::sqlx::QueryData;
+
             #[lina_rs::prelude::async_trait]
             impl lina_rs::sqlx::Crud for #name {
                 type Model = #model;
 
-                async fn create(&self, model: &Self::Model) {
-                    println!("{:?}", model)
+                async fn create(&self, model: &QueryData) {
+                    println!("todo")
                 }
             }
         }
