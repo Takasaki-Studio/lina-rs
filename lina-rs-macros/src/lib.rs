@@ -1,16 +1,18 @@
 use darling::{Error, FromMeta, ast::NestedMeta};
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{Ident, ItemStruct, parse_macro_input};
+use syn::{
+    Field, Fields, FieldsNamed, Ident, ItemImpl, ItemStruct, parse_macro_input, parse_quote,
+    punctuated::Punctuated,
+};
 
 #[derive(Debug, FromMeta)]
 struct RepoArgs {
-    table: String,
-    model: Option<Ident>,
+    database: Ident,
 }
 
 #[proc_macro_attribute]
-pub fn repo(args: TokenStream, input: TokenStream) -> TokenStream {
+pub fn repo(args: TokenStream, item: TokenStream) -> TokenStream {
     let attr_args = match NestedMeta::parse_meta_list(args.into()) {
         Ok(v) => v,
         Err(e) => {
@@ -18,7 +20,7 @@ pub fn repo(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     };
 
-    let item = parse_macro_input!(input as ItemStruct);
+    let input = parse_macro_input!(item as ItemStruct);
     let args = match RepoArgs::from_list(&attr_args) {
         Ok(v) => v,
         Err(e) => {
@@ -26,36 +28,64 @@ pub fn repo(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     };
 
-    let name = &item.ident;
-    let table = args.table;
+    let name = &input.ident;
+    let vis = &input.vis;
+    let database = &args.database;
 
-    let crud_impl = if let Some(model) = args.model {
-        quote! {
-            use lina_rs::sqlx::QueryData;
+    let conn_field: Field = parse_quote! {
+        pub connection: T
+    };
 
-            #[lina_rs::prelude::async_trait]
-            impl lina_rs::sqlx::Crud for #name {
-                type Model = #model;
-
-                async fn create(&self, model: &QueryData) {
-                    println!("todo")
-                }
-            }
+    let new_fields = match input.fields {
+        Fields::Named(mut named) => {
+            named.named.push(conn_field);
+            Fields::Named(named)
         }
-    } else {
-        quote!()
+        _ => {
+            let mut named = Punctuated::new();
+            named.push(conn_field);
+            Fields::Named(FieldsNamed {
+                brace_token: Default::default(),
+                named,
+            })
+        }
     };
 
     quote! {
-        #item
+        #vis struct #name<T> #new_fields
 
-        impl lina_rs::sqlx::Repository for #name {
-            fn table(&self) -> String {
-                (#table).to_string()
+        impl<T> lina_rs::sqlx::Repository<T> for #name<T> {
+            type DB = #database;
+
+            fn new<'a>(connection: T) -> Self
+            where
+                T: sqlx::Acquire<'a, Database = Self::DB>,
+            {
+                #name { connection }
             }
         }
+    }
+    .into()
+}
 
-        #crud_impl
+#[proc_macro_attribute]
+pub fn repo_impl(_: TokenStream, item: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(item as ItemImpl);
+
+    let self_ty = &input.self_ty;
+    let items = &input.items;
+
+    quote! {
+        impl<'a, T> #self_ty<T>
+        where
+            T: sqlx::Acquire<'a, Database = <#self_ty<T> as lina_rs::sqlx::Repository<T>>::DB>,
+        {
+            async fn conn(self) -> Result<T::Connection, sqlx::Error> {
+                self.connection.acquire().await
+            }
+
+            #(#items)*
+        }
     }
     .into()
 }

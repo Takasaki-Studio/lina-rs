@@ -5,7 +5,7 @@ pub mod error;
 pub mod sqlx;
 
 pub mod macros {
-    pub use lina_rs_macros::repo;
+    pub use lina_rs_macros::{repo, repo_impl};
 }
 
 pub mod prelude {
