@@ -697,16 +697,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "lina"
+name = "lina-rs"
 version = "0.1.0"
 dependencies = [
- "lina-macros",
+ "lina-rs-macros",
  "serde",
  "sqlx",
 ]
 
 [[package]]
-name = "lina-macros"
+name = "lina-rs-macros"
 version = "0.1.0"
 dependencies = [
  "darling",

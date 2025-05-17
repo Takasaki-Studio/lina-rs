@@ -1,5 +1,5 @@
 [package]
-name = "lina-macros"
+name = "lina-rs-macros"
 version.workspace = true
 license.workspace = true
 edition.workspace = true
