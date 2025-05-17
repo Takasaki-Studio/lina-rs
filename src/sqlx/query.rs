@@ -5,8 +5,6 @@ pub struct QueryData<'a> {
     pub args: AnyArguments<'a>,
 }
 
-impl QueryData<'_> {}
-
 #[macro_export]
 macro_rules! values {
     ($( $key:expr => $val:expr ),* $(,)?) => {{
