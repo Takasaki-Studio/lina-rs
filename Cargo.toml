@@ -9,7 +9,7 @@ repository = "https://github.com/Takasaki-Studio/lina-rs"
 authors = ["Yummi <yummi@zuraaa.com>"]
 
 [package]
-name = "lina-rs"
+name = "lina"
 version.workspace = true
 license.workspace = true
 edition.workspace = true
@@ -18,15 +18,15 @@ repository.workspace = true
 
 [features]
 all = ["sqlx"]
-sqlx = ["dep:sqlx", "dep:lina-rs-macros"]
+sqlx = ["dep:sqlx", "dep:lina-macros"]
 
 [workspace.dependencies]
-lina-rs-macros = { version = "0.1.0", path = "lina-rs-macros" }
+lina-macros = { version = "0.1.0", path = "lina-rs-macros" }
 
 [dependencies]
 sqlx = { version = "0.8.3", optional = true, features = [
     "runtime-tokio",
     "tls-rustls",
 ] }
-lina-rs-macros = { workspace = true, optional = true }
+lina-macros = { workspace = true, optional = true }
 serde = { version = "1.0.219", features = ["derive"] }
