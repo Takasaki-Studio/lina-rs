@@ -5,6 +5,7 @@ license.workspace = true
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
+description = "Macros for Lina"
 
 [lib]
 proc-macro = true

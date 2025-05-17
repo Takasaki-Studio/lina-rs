@@ -15,6 +15,7 @@ license.workspace = true
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
+description = "A very work in progress framework for simplifing app creation"
 
 [features]
 all = ["sqlx"]
