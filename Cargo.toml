@@ -15,20 +15,16 @@ license.workspace = true
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
-description = "A very work in progress framework for simplifing app creation"
+description = "A very work in progress framework for simplifying app creation"
 
 [features]
 all = ["sqlx"]
-sqlx = ["dep:sqlx", "macros"]
+sqlx = ["macros"]
 macros = ["dep:lina-rs-macros"]
 
 [workspace.dependencies]
 lina-rs-macros = { version = "0.1.0", path = "lina-rs-macros" }
 
 [dependencies]
-sqlx = { version = "0.8.3", optional = true, features = [
-    "runtime-tokio",
-    "tls-rustls",
-] }
 lina-rs-macros = { workspace = true, optional = true }
 serde = { version = "1.0.219", features = ["derive"] }
