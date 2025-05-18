@@ -27,4 +27,3 @@ lina-rs-macros = { version = "0.1.0", path = "lina-rs-macros" }
 
 [dependencies]
 lina-rs-macros = { workspace = true, optional = true }
-serde = { version = "1.0.219", features = ["derive"] }
