@@ -19,7 +19,8 @@ description = "A very work in progress framework for simplifing app creation"
 
 [features]
 all = ["sqlx"]
-sqlx = ["dep:sqlx", "dep:lina-rs-macros"]
+sqlx = ["dep:sqlx", "macros"]
+macros = ["dep:lina-rs-macros"]
 
 [workspace.dependencies]
 lina-rs-macros = { version = "0.1.0", path = "lina-rs-macros" }
